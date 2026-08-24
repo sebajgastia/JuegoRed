@@ -1,0 +1,101 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Jenred prueba\\mi game online\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|e:\\jenred prueba\\mi game online\\assets\\scripts\\tank.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\tank.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|E:\\Jenred prueba\\mi game online\\assets\\scripts\\playerspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playerspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|E:\\Jenred prueba\\mi game online\\assets\\scripts\\photonmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55310C83-A611-C4B8-0C6D-BC1017C39967}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\photonmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FEBDEA30-B14F-3678-676E-56ABAD1BC8C3}|PhotonUnityNetworking.csproj|E:\\Jenred prueba\\mi game online\\assets\\photon\\photonunitynetworking\\code\\photonnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FEBDEA30-B14F-3678-676E-56ABAD1BC8C3}|PhotonUnityNetworking.csproj|solutionrelative:assets\\photon\\photonunitynetworking\\code\\photonnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4CA8696-E8F3-2C5B-F9AA-6AC1B9291C17}|PhotonRealtime.csproj|E:\\Jenred prueba\\mi game online\\assets\\photon\\photonrealtime\\code\\loadbalancingclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4CA8696-E8F3-2C5B-F9AA-6AC1B9291C17}|PhotonRealtime.csproj|solutionrelative:assets\\photon\\photonrealtime\\code\\loadbalancingclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PhotonNetwork.cs",
+              "DocumentMoniker": "E:\\Jenred prueba\\mi game online\\Assets\\Photon\\PhotonUnityNetworking\\Code\\PhotonNetwork.cs",
+              "RelativeDocumentMoniker": "Assets\\Photon\\PhotonUnityNetworking\\Code\\PhotonNetwork.cs",
+              "ToolTip": "E:\\Jenred prueba\\mi game online\\Assets\\Photon\\PhotonUnityNetworking\\Code\\PhotonNetwork.cs",
+              "RelativeToolTip": "Assets\\Photon\\PhotonUnityNetworking\\Code\\PhotonNetwork.cs",
+              "ViewState": "AgIAACEJAAAAAAAAAAAswIQJAACIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-11T01:02:39.045Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerSpawner.cs",
+              "DocumentMoniker": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\PlayerSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerSpawner.cs",
+              "ToolTip": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\PlayerSpawner.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PlayerSpawner.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-11T00:53:38.101Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Tank.cs",
+              "DocumentMoniker": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\Tank.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Tank.cs",
+              "ToolTip": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\Tank.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Tank.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-11T00:51:28.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoadBalancingClient.cs",
+              "DocumentMoniker": "E:\\Jenred prueba\\mi game online\\Assets\\Photon\\PhotonRealtime\\Code\\LoadBalancingClient.cs",
+              "RelativeDocumentMoniker": "Assets\\Photon\\PhotonRealtime\\Code\\LoadBalancingClient.cs",
+              "ToolTip": "E:\\Jenred prueba\\mi game online\\Assets\\Photon\\PhotonRealtime\\Code\\LoadBalancingClient.cs",
+              "RelativeToolTip": "Assets\\Photon\\PhotonRealtime\\Code\\LoadBalancingClient.cs",
+              "ViewState": "AgIAAIsDAAAAAAAAAAAIwLYKAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-11T00:48:09.513Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PhotonManager.cs",
+              "DocumentMoniker": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\PhotonManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PhotonManager.cs",
+              "ToolTip": "E:\\Jenred prueba\\mi game online\\Assets\\Scripts\\PhotonManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PhotonManager.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-11T00:36:10.457Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
