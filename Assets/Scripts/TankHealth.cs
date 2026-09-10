@@ -13,7 +13,7 @@ public class TankHealth : MonoBehaviourPun
         CurrentHealth = maxHealth;
     }
 
-    // El [PunRPC] es lo que permite que este método se ejecute en TODOS los
+    // El [PunRPC] es lo que permite que este mï¿½todo se ejecute en TODOS los
     // clientes cuando alguien lo llama con photonView.RPC(...)
     [PunRPC]
     public void TakeDamage(int amount)
@@ -21,7 +21,7 @@ public class TankHealth : MonoBehaviourPun
         if (isDead) return;
 
         CurrentHealth -= amount;
-        Debug.Log(gameObject.name + " recibió " + amount + " de daño. Vida: " + CurrentHealth);
+        Debug.Log(gameObject.name + " recibiï¿½ " + amount + " de daï¿½o. Vida: " + CurrentHealth);
 
         if (CurrentHealth <= 0)
             Die();
@@ -31,7 +31,7 @@ public class TankHealth : MonoBehaviourPun
     {
         isDead = true;
 
-        // Solo el dueño de ESTE tanque lo destruye (igual que con IsMine en el movimiento)
+        // Solo el dueï¿½o de ESTE tanque lo destruye (igual que con IsMine en el movimiento)
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);

@@ -8,10 +8,10 @@ using Photon.Realtime;
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
     [Header("Paneles de UI")]
-    public GameObject lobbyPanel;      // Panel con InputField, Botón Crear y ScrollView
+    public GameObject lobbyPanel;      // Panel con InputField, Botï¿½n Crear y ScrollView
     public GameObject roomPanel;       // Panel de espera de la sala
-    public GameObject startGameButton;  // Botón "Iniciar Juego"
-    public GameObject menuCanvas;       // El Canvas entero que contiene todo el menú
+    public GameObject startGameButton;  // Botï¿½n "Iniciar Juego"
+    public GameObject menuCanvas;       // El Canvas entero que contiene todo el menï¿½
 
     [Header("UI References")]
     public TMP_InputField roomNameInput;
@@ -56,11 +56,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.InRoom) return;
 
-        string name = "Sala_" + Random.Range(100, 999);
-        if (roomNameInput != null && !string.IsNullOrEmpty(roomNameInput.text))
+        // chequeo para que no tire null
+        if (roomNameInput == null || string.IsNullOrWhiteSpace(roomNameInput.text))
         {
-            name = roomNameInput.text;
+            Debug.LogWarning("Nombre de sala invÃ¡lido. Debes ingresar un nombre.");
+            return;
         }
+
+        string name = roomNameInput.text.Trim();
 
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = 4;
@@ -88,12 +91,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // Método que llama el botón de Iniciar Juego
+    // Mï¿½todo que llama el botï¿½n de Iniciar Juego
     public void StartGame()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Cerramos la sala para que no entre nadie más a mitad de partida
+            // Cerramos la sala para que no entre nadie mï¿½s a mitad de partida
             PhotonNetwork.CurrentRoom.IsOpen = false;
 
             // Enviamos el mensaje RPC a todos los jugadores de la sala
@@ -104,14 +107,17 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPC_StartGame()
     {
-        // 1. Desactivamos el menú por completo
         if (menuCanvas != null)
         {
             menuCanvas.SetActive(false);
         }
 
-        // 2. Instanciamos al jugador si hay un prefab asignado
         SpawnPlayer();
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGame();
+        }
     }
 
     private void SpawnPlayer()

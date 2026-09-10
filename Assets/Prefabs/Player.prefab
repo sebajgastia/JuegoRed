@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 5545109672336372809}
   - component: {fileID: 515069640621595296}
   - component: {fileID: 8681971506134088854}
+  - component: {fileID: -3967851394491708403}
   m_Layer: 0
-  m_Name: Tank
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,3 +163,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 8
   turnSpeed: 100
+--- !u!114 &-3967851394491708403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636956077024144109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eef7eb0a14115a46a687d360123bed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRole: 1

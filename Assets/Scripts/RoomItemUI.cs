@@ -20,7 +20,7 @@ public class RoomItemUI : MonoBehaviour
         roomNameText.text = info.Name;
         playerCountText.text = $"{info.PlayerCount}/{info.MaxPlayers}";
 
-        // Deshabilita el botón si la sala ya tiene 4 jugadores o está cerrada
+        // Deshabilita el botï¿½n si la sala ya tiene 4 jugadores o estï¿½ cerrada
         bool isFull = info.PlayerCount >= info.MaxPlayers;
         joinButton.interactable = info.IsOpen && !isFull;
 
