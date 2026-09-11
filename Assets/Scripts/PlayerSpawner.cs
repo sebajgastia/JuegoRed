@@ -1,12 +1,12 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerSpawner : MonoBehaviourPunCallbacks
+public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private string tankPrefabName = "Tank";
+    public GameObject playerPrefab; 
 
-    public override void OnJoinedRoom()
+    void Start()
     {
-        PhotonNetwork.Instantiate(tankPrefabName, new Vector3(0, 0, 0), Quaternion.identity);
+        PhotonNetwork.Instantiate(playerPrefab.name, transform.position, Quaternion.identity);
     }
 }
