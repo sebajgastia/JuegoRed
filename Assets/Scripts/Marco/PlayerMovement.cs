@@ -1,9 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
 
-// Poné este script en el PREFAB del jugador.
-// La sincronización de posición NO va en este código: la hace el componente
-// "Photon Transform View" que agregás desde el Inspector (ver instrucciones).
 public class PlayerMovement : MonoBehaviourPun
 {
     public float moveSpeed = 5f;

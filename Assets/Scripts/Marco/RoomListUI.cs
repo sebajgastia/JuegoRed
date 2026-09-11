@@ -13,7 +13,6 @@ public class RoomListUI : MonoBehaviour
     public GameObject roomButtonPrefab;
     public TMP_InputField newRoomNameInput;
 
-    // Lo llama NetworkManager cada vez que cambia la lista de salas.
     public void RefreshRoomList(Dictionary<string, RoomInfo> rooms)
     {
         foreach (Transform child in roomListContainer)

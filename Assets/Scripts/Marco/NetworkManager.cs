@@ -4,10 +4,6 @@ using Photon.Realtime;
 using UnityEngine;
 using TMPro;
 
-// Conexión al servidor de Photon y manejo de Rooms.
-// Mismo flujo que vimos en la deck de Rooms:
-// ConnectUsingSettings -> OnConnectedToMaster -> JoinLobby -> OnJoinedLobby
-// -> (el jugador elige sala en RoomListUI) -> JoinRoom / CreateRoom -> OnJoinedRoom
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public TMP_Text statusText;
@@ -33,8 +29,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         statusText.text = "Elegí una sala o creá una nueva.";
     }
 
-    // Photon manda solo los CAMBIOS de la lista de salas, no la lista completa.
-    // Por eso guardamos nuestra propia copia acumulada (igual que en la deck de Rooms).
+ 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (RoomInfo info in roomList)
