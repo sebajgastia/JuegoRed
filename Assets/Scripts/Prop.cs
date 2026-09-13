@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MapProp : MonoBehaviour
+public class Prop : MonoBehaviour
 {
     [SerializeField] private bool destructible = true;
 
