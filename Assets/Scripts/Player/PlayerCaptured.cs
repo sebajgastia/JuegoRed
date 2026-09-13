@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerCaptured : MonoBehaviourPun
 {
     public bool IsCaptured { get; private set; }
+    private PlayerRole playerRole;
 
     public void Capture()
     {
@@ -21,6 +22,7 @@ public class PlayerCaptured : MonoBehaviourPun
     private void RPC_SetCapturedState(bool state)
     {
         IsCaptured = state;
+        playerRole.UpdateColor();
 
         if (IsCaptured)
         {

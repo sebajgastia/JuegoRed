@@ -29,5 +29,25 @@ public class PlayerMovement : MonoBehaviourPun
 
         Vector3 movement = new Vector3(h, v, 0f);
         transform.position += movement.normalized * moveSpeed * Time.deltaTime;
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            DestroyObjects();
+        }
+    }
+
+    private void DestroyObjects()
+    {
+        GameObject[] destructibles = GameObject.FindGameObjectsWithTag("Prop");
+
+        foreach (GameObject obj in destructibles)
+        {
+            Prop prop = obj.GetComponent<Prop>();
+
+            if (prop != null)
+            {
+                prop.DestroyProp();
+            }
+        }
     }
 }

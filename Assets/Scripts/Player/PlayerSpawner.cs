@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Transform[] spawnPoints;
 
     private bool hasSpawned = false;
 
@@ -17,10 +18,16 @@ public class PlayerSpawner : MonoBehaviour
 
         hasSpawned = true;
 
+        int spawnIndex =
+            (PhotonNetwork.LocalPlayer.ActorNumber - 1)
+            % spawnPoints.Length;
+
+        Transform spawnPoint = spawnPoints[spawnIndex];
+
         PhotonNetwork.Instantiate(
             playerPrefab.name,
-            transform.position,
-            Quaternion.identity
+            spawnPoint.position,
+            spawnPoint.rotation
         );
     }
 }

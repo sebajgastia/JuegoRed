@@ -168,6 +168,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentRole: 1
+  hiderColor: {r: 0, g: 0, b: 1, a: 1}
+  seekerColor: {r: 1, g: 0, b: 0, a: 1}
+  spriteRenderer: {fileID: 6684350998050512678}
 --- !u!114 &3851273420914821870
 MonoBehaviour:
   m_ObjectHideFlags: 0
