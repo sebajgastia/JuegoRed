@@ -17,6 +17,8 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
     private PhotonView pv;
 
+    [SerializeField] private PropSpawner propSpawner;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,11 +39,16 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        if (PhotonNetwork.CurrentRoom.PlayerCount < 4) return;
+
+        //CAMBIAR A 4 PARA EL JUEGO / ESTA ASI PARA TESTEAR
+        if (PhotonNetwork.CurrentRoom.PlayerCount < 1) return;
 
         Debug.Log("empieza el juego");
 
+        propSpawner.SpawnProps();
+
         AssignRoles();
+
         ChangeState(GameState.Hiding);
     }
 

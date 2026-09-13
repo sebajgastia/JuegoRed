@@ -1,51 +1,121 @@
+using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class PropSpawner : MonoBehaviour
+public class PropSpawner : MonoBehaviourPun
 {
     [SerializeField] private ObjectPool objectPool;
-    [SerializeField] private Transform[] spawnPoints;
-    public static event Action OnSpawnProps;
 
-    private void Start()
-    {
-        TriggerSpawnProps();
-    }
+    [SerializeField] private int amountToSpawn = 30;
+
+    [Header("Zona de spawn")]
+    [SerializeField] private Vector2 minSpawn = new Vector2(-8f, -4f);
+    [SerializeField] private Vector2 maxSpawn = new Vector2(8f, 4f);
+
+    private Dictionary<int, Prop> spawnedProps =
+        new Dictionary<int, Prop>();
 
     public void SpawnProps()
     {
-        Debug.Log("se spawnean los props");
+        if (!PhotonNetwork.IsMasterClient)
+            return;
 
-        foreach (Transform spawnPoint in spawnPoints)
+        int[] prefabIndexes =
+            new int[amountToSpawn];
+
+        Vector3[] positions =
+            new Vector3[amountToSpawn];
+
+        for (int i = 0; i < amountToSpawn; i++)
         {
-            GameObject prop = objectPool.GetRandomObject();
+            prefabIndexes[i] =
+                Random.Range(
+                    0,
+                    objectPool.PrefabCount
+                );
 
-            if (prop == null)
-            {
-                Debug.Log("null");
-                continue;
-            }
+            float randomX =
+                Random.Range(
+                    minSpawn.x,
+                    maxSpawn.x
+                );
 
-            prop.transform.position = spawnPoint.position;
-            prop.transform.rotation = spawnPoint.rotation;
+            float randomY =
+                Random.Range(
+                    minSpawn.y,
+                    maxSpawn.y
+                );
 
-            prop.SetActive(true);
+            positions[i] =
+                new Vector3(
+                    randomX,
+                    randomY,
+                    0f
+                );
         }
 
+        photonView.RPC(
+            nameof(RPC_SpawnProps),
+            RpcTarget.AllBuffered,
+            prefabIndexes,
+            positions
+        );
     }
 
-    private void OnEnable()
+    [PunRPC]
+    private void RPC_SpawnProps(
+        int[] prefabIndexes,
+        Vector3[] positions)
     {
-        OnSpawnProps += SpawnProps;
+        spawnedProps.Clear();
+
+        for (int i = 0; i < prefabIndexes.Length; i++)
+        {
+            GameObject propObject =
+                objectPool.GetObject(
+                    prefabIndexes[i]
+                );
+
+            if (propObject == null)
+                continue;
+
+            propObject.transform.position =
+                positions[i];
+
+            propObject.transform.rotation =
+                Quaternion.identity;
+
+            Prop prop =
+                propObject.GetComponent<Prop>();
+
+            if (prop != null)
+            {
+                prop.Initialize(i, this);
+
+                spawnedProps.Add(i, prop);
+            }
+
+            propObject.SetActive(true);
+        }
     }
 
-    private void OnDisable()
+    public void RequestDestroyProp(int propId)
     {
-        OnSpawnProps -= SpawnProps;
+        photonView.RPC(
+            nameof(RPC_DestroyProp),
+            RpcTarget.All,
+            propId
+        );
     }
 
-    public static void TriggerSpawnProps()
+    [PunRPC]
+    private void RPC_DestroyProp(int propId)
     {
-        OnSpawnProps?.Invoke();
+        if (!spawnedProps.TryGetValue(
+                propId,
+                out Prop prop))
+            return;
+
+        prop.DestroyPropLocal();
     }
 }

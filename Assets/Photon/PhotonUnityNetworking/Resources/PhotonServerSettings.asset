@@ -42,6 +42,8 @@ MonoBehaviour:
   - TakeDamage
   - RPC_StartGame
   - Rpc_ChangeState
+  - RPC_DestroyProp
+  - RPC_SpawnProps
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

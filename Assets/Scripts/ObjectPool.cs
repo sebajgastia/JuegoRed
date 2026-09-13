@@ -6,7 +6,10 @@ public class ObjectPool : MonoBehaviour
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private int amountPerPrefab = 5;
 
-    private List<GameObject> pooledObjects = new List<GameObject>();
+    private List<List<GameObject>> pools =
+        new List<List<GameObject>>();
+
+    public int PrefabCount => prefabs.Length;
 
     private void Awake()
     {
@@ -15,40 +18,57 @@ public class ObjectPool : MonoBehaviour
 
     private void CreatePool()
     {
-        foreach (GameObject prefab in prefabs)
+        for (int prefabIndex = 0;
+             prefabIndex < prefabs.Length;
+             prefabIndex++)
         {
+            List<GameObject> prefabPool =
+                new List<GameObject>();
+
             for (int i = 0; i < amountPerPrefab; i++)
             {
-                GameObject obj = Instantiate(prefab);
+                GameObject obj =
+                    Instantiate(prefabs[prefabIndex]);
 
                 obj.SetActive(false);
 
-                pooledObjects.Add(obj);
+                prefabPool.Add(obj);
             }
+
+            pools.Add(prefabPool);
         }
     }
 
-    public GameObject GetRandomObject()
+    public GameObject GetObject(int prefabIndex)
     {
-        List<GameObject> availableObjects = new List<GameObject>();
+        if (prefabIndex < 0 ||
+            prefabIndex >= pools.Count)
+        {
+            Debug.LogError(
+                "Índice de prefab inválido: " +
+                prefabIndex
+            );
 
-        foreach (GameObject obj in pooledObjects)
+            return null;
+        }
+
+        foreach (GameObject obj in pools[prefabIndex])
         {
             if (!obj.activeInHierarchy)
             {
-                availableObjects.Add(obj);
+                return obj;
             }
         }
 
-        if (availableObjects.Count == 0)
-        {
-            Debug.LogWarning("pool vacia");
-            int random = Random.Range(0, prefabs.Length);
-            return Instantiate(prefabs[random]);
-        }
+        // Si no quedan disponibles de ese prefab,
+        // creamos otro del MISMO tipo.
+        GameObject newObj =
+            Instantiate(prefabs[prefabIndex]);
 
-        int randomIndex = Random.Range(0, availableObjects.Count);
+        newObj.SetActive(false);
 
-        return availableObjects[randomIndex];
+        pools[prefabIndex].Add(newObj);
+
+        return newObj;
     }
 }
