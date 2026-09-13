@@ -426,6 +426,7 @@ MonoBehaviour:
   roomButtonPrefab: {fileID: 3397480276234527292, guid: 714e829887ee62b4c8fcf478ac65ba78,
     type: 3}
   newRoomNameInput: {fileID: 1244716826}
+  roomButtonFont: {fileID: 11400000, guid: 1025fdbedc7721142ae51db946dab16e, type: 2}
 --- !u!4 &1205890000
 Transform:
   m_ObjectHideFlags: 0

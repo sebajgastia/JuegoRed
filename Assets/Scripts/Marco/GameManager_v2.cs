@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using Photon.Pun;
 
 public class GameManager_v2 : MonoBehaviourPunCallbacks
@@ -18,6 +19,23 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     private PhotonView pv;
 
     [SerializeField] private PropSpawner propSpawner;
+    [SerializeField] private float hidingTime = 45f;
+
+    private double hidingEndTime;
+
+    public float HidingTimeRemaining
+    {
+        get
+        {
+            if (CurrentState != GameState.Hiding)
+                return 0f;
+
+            return Mathf.Max(
+                0f,
+                (float)(hidingEndTime - PhotonNetwork.Time)
+            );
+        }
+    }
 
     private void Awake()
     {
@@ -41,7 +59,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) return;
 
         //CAMBIAR A 4 PARA EL JUEGO / ESTA ASI PARA TESTEAR
-        if (PhotonNetwork.CurrentRoom.PlayerCount < 1) return;
+        if (PhotonNetwork.CurrentRoom.PlayerCount < 2) return;
 
         Debug.Log("empieza el juego");
 
@@ -49,7 +67,46 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
         AssignRoles();
 
-        ChangeState(GameState.Hiding);
+        StartHidingPhase();
+    }
+
+    private void StartHidingPhase()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        double endTime =
+            PhotonNetwork.Time + hidingTime;
+
+        pv.RPC(
+            nameof(RPC_StartHiding),
+            RpcTarget.All,
+            endTime
+        );
+
+        StartCoroutine(HidingPhase());
+    }
+
+    [PunRPC]
+    private void RPC_StartHiding(double endTime)
+    {
+        hidingEndTime = endTime;
+        CurrentState = GameState.Hiding;
+
+        Debug.Log(
+            "Hiding comenzó. Termina en PhotonTime: "
+            + hidingEndTime
+        );
+    }
+
+    private IEnumerator HidingPhase()
+    {
+        while (PhotonNetwork.Time < hidingEndTime)
+        {
+            yield return null;
+        }
+
+        ChangeState(GameState.Seeking);
     }
 
     public void EndGame()
@@ -96,6 +153,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     private void Rpc_ChangeState(int newState)
     {
         CurrentState = (GameState)newState;
+
         Debug.Log(CurrentState);
     }
 }

@@ -12,6 +12,7 @@ public class RoomListUI : MonoBehaviour
     public Transform roomListContainer;
     public GameObject roomButtonPrefab;
     public TMP_InputField newRoomNameInput;
+    [SerializeField] private TMP_FontAsset roomButtonFont;
 
     public void RefreshRoomList(Dictionary<string, RoomInfo> rooms)
     {
@@ -25,8 +26,12 @@ public class RoomListUI : MonoBehaviour
             GameObject buttonObj = Instantiate(roomButtonPrefab, roomListContainer);
             string roomName = info.Name;
 
-            buttonObj.GetComponentInChildren<TMP_Text>().text =
-                roomName + " (" + info.PlayerCount + "/" + info.MaxPlayers + ")";
+            TMP_Text buttonText =
+                buttonObj.GetComponentInChildren<TMP_Text>();
+
+            buttonText.font = roomButtonFont;
+
+            buttonText.text = roomName + " (" +info.PlayerCount + "/" + info.MaxPlayers + ")";
 
             buttonObj.GetComponent<Button>().onClick.AddListener(() =>
             {

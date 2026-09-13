@@ -44,6 +44,9 @@ MonoBehaviour:
   - Rpc_ChangeState
   - RPC_DestroyProp
   - RPC_SpawnProps
+  - RPC_SetRole
+  - RPC_Capture
+  - RPC_StartHiding
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
