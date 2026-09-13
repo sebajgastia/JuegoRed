@@ -1,8 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
 
-// Vive como objeto FIJO en la escena de juego (necesita un PhotonView agregado
-// a mano en el Inspector, como el StageGenerator del ejemplo de Tanques).
 public class GameManager_v2 : MonoBehaviourPunCallbacks
 {
     public static GameManager_v2 Instance { get; private set; }
@@ -36,7 +34,6 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         CurrentState = GameState.Waiting;
     }
 
-    // Lo llama el botón "Empezar Partida" (solo lo ve el MasterClient).
     public void StartGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -48,15 +45,12 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         ChangeState(GameState.Hiding);
     }
 
-    // Lo va a llamar la lógica de captura de tus compañeros cuando se cumpla
-    // la condición de victoria (cazador atrapó a todos, o se acabó el tiempo).
     public void EndGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
         ChangeState(GameState.GameOver);
     }
 
-    // Lo llama el botón "Volver a Jugar" (solo lo ve el MasterClient, después del GameOver).
     public void ReturnToLobby()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -83,7 +77,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     {
         PlayerRole[] players = FindObjectsOfType<PlayerRole>();
         foreach (PlayerRole p in players)
-            p.SetRole(PlayerRole.Role.Hider); // valor neutro hasta el próximo StartGame
+            p.SetRole(PlayerRole.Role.Hider);
     }
 
     public void ChangeState(GameState newState)

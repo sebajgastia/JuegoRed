@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Prop : MonoBehaviour
 {
@@ -14,6 +15,6 @@ public class Prop : MonoBehaviour
         if (!destructible)
             return;
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

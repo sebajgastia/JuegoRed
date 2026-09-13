@@ -8,7 +8,7 @@ public class ObjectPool : MonoBehaviour
 
     private List<GameObject> pooledObjects = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         CreatePool();
     }
@@ -43,7 +43,8 @@ public class ObjectPool : MonoBehaviour
         if (availableObjects.Count == 0)
         {
             Debug.LogWarning("pool vacia");
-            return null;
+            int random = Random.Range(0, prefabs.Length);
+            return Instantiate(prefabs[random]);
         }
 
         int randomIndex = Random.Range(0, availableObjects.Count);
