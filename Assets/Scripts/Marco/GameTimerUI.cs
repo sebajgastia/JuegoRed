@@ -1,9 +1,9 @@
 using UnityEngine;
-using TMPro; // Si usas TextMeshPro
+using TMPro;
 
 public class GameTimerUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timerText; // Si usas UI Normal cambia a: public Text timerText;
+    [SerializeField] private TextMeshProUGUI timerText;
 
     private void Update()
     {
@@ -14,7 +14,7 @@ public class GameTimerUI : MonoBehaviour
         if (state == GameManager_v2.GameState.Hiding)
         {
             float time = GameManager_v2.Instance.HidingTimeRemaining;
-            timerText.text = "ESCONDIÉNDOSE: " + Mathf.CeilToInt(time).ToString() + "s";
+            timerText.text = "ESCONDIENDOSE: " + Mathf.CeilToInt(time).ToString() + "s";
         }
         else if (state == GameManager_v2.GameState.Seeking)
         {
@@ -27,7 +27,7 @@ public class GameTimerUI : MonoBehaviour
         }
         else if (state == GameManager_v2.GameState.GameOver)
         {
-            timerText.text = "¡Juego Terminado!";
+            timerText.text = "Juego Terminado!";
         }
     }
 }

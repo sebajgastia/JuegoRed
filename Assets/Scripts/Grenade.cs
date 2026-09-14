@@ -30,7 +30,6 @@ public class Grenade : MonoBehaviourPun
         if (!photonView.IsMine)
             return;
 
-        // Explota solamente al tocar un Prop
         if (other.CompareTag("Prop"))
         {
             Explode();
@@ -47,7 +46,6 @@ public class Grenade : MonoBehaviourPun
 
         hasExploded = true;
 
-        // Buscar todos los objetos dentro del radio
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             transform.position,
             explosionRadius
@@ -57,20 +55,17 @@ public class Grenade : MonoBehaviourPun
         {
             Prop prop = hit.GetComponent<Prop>();
 
-            // Destruir solamente Props destructibles
             if (prop != null && prop.IsDestructible())
             {
                 prop.DestroyProp();
             }
         }
 
-        // Destruir la granada para todos
         PhotonNetwork.Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
     {
-        // Permite ver el radio de explosión en el editor
         Gizmos.DrawWireSphere(
             transform.position,
             explosionRadius

@@ -66,6 +66,6 @@ public class PlayerCaptured : MonoBehaviourPun
             playerRole.UpdateColor();
         }
 
-        Debug.Log(gameObject.name + " dejó de estar capturado");
+        Debug.Log(gameObject.name + " deja de estar capturado");
     }
 }

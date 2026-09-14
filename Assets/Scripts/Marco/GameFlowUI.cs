@@ -13,7 +13,6 @@ public class GameFlowUI : MonoBehaviour
 
     [SerializeField] private TMP_Text searchStartedText;
     [SerializeField] private float searchMessageDuration = 3f;
-    //[SerializeField] private TMP_Text hidingTimerText;
 
     [Header("End Game")]
     [SerializeField] private GameObject endGamePanel;
@@ -24,7 +23,6 @@ public class GameFlowUI : MonoBehaviour
 
     private void Start()
     {
-        //searchStartedText.gameObject.SetActive(false);
 
         endGamePanel.SetActive(false);
 
@@ -150,12 +148,12 @@ public class GameFlowUI : MonoBehaviour
             PlayerRole.Role.Seeker)
         {
             searchStartedText.text =
-                "¡COMENZÁ A BUSCAR!";
+                "COMIENZA A BUSCAR!";
         }
         else
         {
             searchStartedText.text =
-                "¡EL SEEKER YA ESTÁ BUSCANDO!";
+                "EL SEEKER YA ESTA BUSCANDO!";
         }
 
         searchStartedText.gameObject.SetActive(true);
@@ -184,11 +182,11 @@ public class GameFlowUI : MonoBehaviour
 
         if (roleText != null && localPlayer.CurrentRole == PlayerRole.Role.Seeker)
         {
-            roleText.text = "SOS EL SEEKER\nEsperá a que los jugadores se escondan";
+            roleText.text = "SOS EL SEEKER\nEspera a que los jugadores se escondan";
         }
         else
         {
-            roleText.text = "SOS HIDER\nTenés 45 segundos para esconderte";
+            roleText.text = "SOS HIDER\nTenes 45 segundos para esconderte";
         }
     }
 
@@ -197,7 +195,7 @@ public class GameFlowUI : MonoBehaviour
         if (GameManager_v2.Instance == null)
             return;
 
-        //durante la fase de búsqueda
+        //durante la fase de bï¿½squeda
         if (GameManager_v2.Instance.CurrentState !=
             GameManager_v2.GameState.Seeking)
         {

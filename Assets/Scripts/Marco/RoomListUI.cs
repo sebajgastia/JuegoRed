@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// Dibuja la lista de salas como botones, y deja crear una sala nueva.
-// No habla con Photon directamente: solo llama a los métodos de NetworkManager.
 public class RoomListUI : MonoBehaviour
 {
     public NetworkManager networkManager;

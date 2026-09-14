@@ -5,7 +5,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private float smoothSpeed = 5f;
 
-    [Header("Límites del mapa")]
+    [Header("Limites del mapa")]
     [SerializeField] private float minX = -21.5f;
     [SerializeField] private float maxX = 24.5f;
     [SerializeField] private float minY = -8.5f;
@@ -93,7 +93,7 @@ public class CameraFollow : MonoBehaviour
                 target = player.transform;
 
                 Debug.Log(
-                    "La cámara encontró al Player local: " +
+                    "La camara encontro al Player local: " +
                     player.gameObject.name
                 );
 
