@@ -56,7 +56,7 @@ public class PropSpawner : MonoBehaviourPun
 
         photonView.RPC(
             nameof(RPC_SpawnProps),
-            RpcTarget.AllBuffered,
+            RpcTarget.All,
             prefabIndexes,
             positions
         );

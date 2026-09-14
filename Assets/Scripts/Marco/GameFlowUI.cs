@@ -52,8 +52,10 @@ public class GameFlowUI : MonoBehaviour
             state == GameManager_v2.GameState.Waiting
         );
 
-        startButton.interactable =
-            PhotonNetwork.CurrentRoom.PlayerCount == 2;//cambiar a 4
+        int count = PhotonNetwork.CurrentRoom.PlayerCount;
+
+        
+        startButton.interactable = PhotonNetwork.IsMasterClient && (count >= 2 && count <= 4);
 
         returnToLobbyButton.gameObject.SetActive(
             isMaster &&

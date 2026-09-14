@@ -76,8 +76,12 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        // CAMBIAR A 4 PARA EL JUEGO / ESTA ASI PARA TESTEAR
-        if (PhotonNetwork.CurrentRoom.PlayerCount < 2) return;
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+
+        
+        if (playerCount < 2 || playerCount > 4) return;
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
 
         Debug.Log("Empieza el juego");
 
@@ -258,6 +262,8 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
 
         propSpawner.ClearAllProps();
 
