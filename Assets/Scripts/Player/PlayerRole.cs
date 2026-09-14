@@ -5,6 +5,7 @@ public class PlayerRole : MonoBehaviourPun
 {
     public enum Role
     {
+        None,
         Hider,
         Seeker
     }
@@ -14,7 +15,7 @@ public class PlayerRole : MonoBehaviourPun
     [SerializeField] private Color seekerColor = Color.red;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Color capturedColor = Color.cyan;
-
+    [SerializeField] private Color lobbyColor = Color.white;
     public Role CurrentRole => currentRole;
     private PlayerCaptured playerCaptured;
 
@@ -44,12 +45,41 @@ public class PlayerRole : MonoBehaviourPun
         }
     }
 
+    public void ResetToLobby()
+    {
+        photonView.RPC(
+            nameof(RPC_ResetToLobby),
+            RpcTarget.AllBuffered
+        );
+    }
+
+    [PunRPC]
+    private void RPC_ResetToLobby()
+    {
+        currentRole = Role.None;
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = lobbyColor;
+        }
+
+        Debug.Log(
+           gameObject.name +
+           " reseteado al lobby. Rol actual: " +
+           currentRole
+        );
+    }
+
     public void UpdateColor()
     {
         if (spriteRenderer == null)
             return;
 
-        if (playerCaptured != null && playerCaptured.IsCaptured)
+        if (currentRole == Role.None)
+        {
+            spriteRenderer.color = Color.white;
+        }
+        else if (playerCaptured != null && playerCaptured.IsCaptured)
         {
             spriteRenderer.color = capturedColor;
         }

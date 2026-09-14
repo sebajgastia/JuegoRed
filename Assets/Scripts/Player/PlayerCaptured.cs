@@ -4,6 +4,12 @@ using UnityEngine;
 public class PlayerCaptured : MonoBehaviourPun
 {
     public bool IsCaptured { get; private set; }
+    private PlayerRole playerRole;
+
+    private void Awake()
+    {
+        playerRole = GetComponent<PlayerRole>();
+    }
 
     public void Capture()
     {
@@ -40,5 +46,26 @@ public class PlayerCaptured : MonoBehaviourPun
         {
             Debug.Log(gameObject.name + " fue liberado");
         }
+    }
+
+    public void ResetCaptured()
+    {
+        photonView.RPC(
+            nameof(RPC_ResetCaptured),
+            RpcTarget.AllBuffered
+        );
+    }
+
+    [PunRPC]
+    private void RPC_ResetCaptured()
+    {
+        IsCaptured = false;
+
+        if (playerRole != null)
+        {
+            playerRole.UpdateColor();
+        }
+
+        Debug.Log(gameObject.name + " dejó de estar capturado");
     }
 }

@@ -1,6 +1,7 @@
-using UnityEngine;
-using System.Collections;
 using Photon.Pun;
+using System.Collections;
+using System.Reflection;
+using UnityEngine;
 
 public class GameManager_v2 : MonoBehaviourPunCallbacks
 {
@@ -15,6 +16,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     }
 
     public GameState CurrentState { get; private set; }
+    public PlayerRole.Role WinningRole { get; private set; }
 
     private PhotonView pv;
 
@@ -111,9 +113,14 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
     private IEnumerator HidingPhase()
     {
-        while (PhotonNetwork.Time < hidingEndTime)
+        while (CurrentState == GameState.Hiding && PhotonNetwork.Time < hidingEndTime)
         {
             yield return null;
+        }
+
+        if (CurrentState != GameState.Hiding)
+        {
+            yield break;
         }
 
         StartSeekingPhase();
@@ -147,13 +154,56 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
     private IEnumerator SeekingPhase()
     {
-        while (PhotonNetwork.Time < seekingEndTime)
+        while (CurrentState == GameState.Seeking && PhotonNetwork.Time < seekingEndTime)
         {
+
+            if (AreAllHidersCaptured())
+            {
+                Debug.Log("Todos los Hiders fueron capturados. Ganó el Seeker.");
+
+                EndGame(PlayerRole.Role.Seeker);
+
+                yield break;
+            }
+
             yield return null;
         }
 
-        Debug.Log("¡Se acabó el tiempo de búsqueda! Ganaron los Hiders.");
-        EndGame();
+        // Si salimos de Seeking porque volvimos al lobby
+        if (CurrentState != GameState.Seeking)
+        {
+            yield break;
+        }
+
+        Debug.Log("Se acabó el tiempo. Ganaron los Hiders.");
+
+        EndGame(PlayerRole.Role.Hider);
+    }
+
+    private bool AreAllHidersCaptured()
+    {
+        PlayerRole[] players =
+            FindObjectsOfType<PlayerRole>();
+
+        bool foundHider = false;
+
+        foreach (PlayerRole player in players)
+        {
+            if (player.CurrentRole != PlayerRole.Role.Hider)
+                continue;
+
+            foundHider = true;
+
+            PlayerCaptured captured =
+                player.GetComponent<PlayerCaptured>();
+
+            if (captured == null || !captured.IsCaptured)
+            {
+                return false;
+            }
+        }
+
+        return foundHider;
     }
 
     public void ApplyTimePenalty(float penaltySeconds)
@@ -176,17 +226,43 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    public void EndGame()
+    public void EndGame(PlayerRole.Role winner)
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        ChangeState(GameState.GameOver);
+        if (CurrentState == GameState.GameOver)
+            return;
+
+        pv.RPC(
+            nameof(RPC_EndGame),
+            RpcTarget.All,
+            (int)winner
+        );
+    }
+
+    [PunRPC]
+    private void RPC_EndGame(int winningRole)
+    {
+        WinningRole =
+            (PlayerRole.Role)winningRole;
+
+        CurrentState =
+            GameState.GameOver;
+
+        Debug.Log(
+            "GAME OVER - Ganó: " +
+            WinningRole
+        );
     }
 
     public void ReturnToLobby()
     {
-        if (!PhotonNetwork.IsMasterClient) return;
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        propSpawner.ClearAllProps();
 
         ResetRoles();
+
         ChangeState(GameState.Waiting);
     }
 
@@ -206,9 +282,21 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
     private void ResetRoles()
     {
-        PlayerRole[] players = FindObjectsOfType<PlayerRole>();
-        foreach (PlayerRole p in players)
-            p.SetRole(PlayerRole.Role.Hider);
+        PlayerRole[] players =
+            FindObjectsOfType<PlayerRole>();
+
+        foreach (PlayerRole player in players)
+        {
+            PlayerCaptured captured =
+                player.GetComponent<PlayerCaptured>();
+
+            if (captured != null)
+            {
+                captured.ResetCaptured();
+            }
+
+            player.ResetToLobby();
+        }
     }
 
     public void ChangeState(GameState newState)

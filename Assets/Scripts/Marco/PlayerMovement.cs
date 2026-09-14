@@ -18,7 +18,10 @@ public class PlayerMovement : MonoBehaviourPun
     }
 
     void Update()
-    {              
+    {
+        if (GameManager_v2.Instance != null && GameManager_v2.Instance.CurrentState == GameManager_v2.GameState.GameOver)
+            return;
+
         if (!photonView.IsMine)
             return;
 

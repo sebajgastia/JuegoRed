@@ -13,22 +13,30 @@ public class GameFlowUI : MonoBehaviour
 
     [SerializeField] private TMP_Text searchStartedText;
     [SerializeField] private float searchMessageDuration = 3f;
-    [SerializeField] private TMP_Text hidingTimerText;
+    //[SerializeField] private TMP_Text hidingTimerText;
+
+    [Header("End Game")]
+    [SerializeField] private GameObject endGamePanel;
+    [SerializeField] private TMP_Text resultText;
 
     private GameManager_v2.GameState previousState;
     private float searchMessageTimer;
 
     private void Start()
     {
-        searchStartedText.gameObject.SetActive(false);
+        //searchStartedText.gameObject.SetActive(false);
+
+        endGamePanel.SetActive(false);
+
+        returnToLobbyButton.gameObject.SetActive(false);
 
         if (GameManager_v2.Instance != null)
         {
             previousState =
                 GameManager_v2.Instance.CurrentState;
         }
-
     }
+
     void Update()
     {
         if (!PhotonNetwork.InRoom || GameManager_v2.Instance == null)
@@ -45,7 +53,7 @@ public class GameFlowUI : MonoBehaviour
         );
 
         startButton.interactable =
-            PhotonNetwork.CurrentRoom.PlayerCount == 3;//cambiar a 4
+            PhotonNetwork.CurrentRoom.PlayerCount == 2;//cambiar a 4
 
         returnToLobbyButton.gameObject.SetActive(
             isMaster &&
@@ -54,13 +62,23 @@ public class GameFlowUI : MonoBehaviour
 
         UpdateRoleText(state);
         UpdateCapturedText();
-        UpdateHidingTimer(state);
+        //UpdateHidingTimer(state);
 
         if (state != previousState)
         {
             if (state == GameManager_v2.GameState.Seeking)
             {
                 ShowSearchStartedMessage();
+            }
+
+            if (state == GameManager_v2.GameState.GameOver)
+            {
+                ShowGameOverResult();
+            }
+
+            if (state == GameManager_v2.GameState.Waiting)
+            {
+                endGamePanel.SetActive(false);
             }
 
             previousState = state;
@@ -77,24 +95,45 @@ public class GameFlowUI : MonoBehaviour
         }
     }
 
-    private void UpdateHidingTimer(GameManager_v2.GameState state)
+    private void ShowGameOverResult()
     {
-        if (state != GameManager_v2.GameState.Hiding)
-        {
-            hidingTimerText.gameObject.SetActive(false);
+        PlayerRole localPlayer =
+            GetLocalPlayerRole();
+
+        if (localPlayer == null)
             return;
+
+        PlayerRole.Role winner =
+            GameManager_v2.Instance.WinningRole;
+
+        bool localPlayerWon =
+            localPlayer.CurrentRole == winner;
+
+        if (localPlayerWon)
+        {
+            resultText.text = "VICTORIA";
+            resultText.color = Color.green;
+        }
+        else
+        {
+            resultText.text = "DERROTA";
+            resultText.color = Color.red;
         }
 
-        hidingTimerText.gameObject.SetActive(true);
+        capturedText.gameObject.SetActive(false);
 
-        float timeRemaining =
-            GameManager_v2.Instance.HidingTimeRemaining;
+        roleText.gameObject.SetActive(false);
+        //hidingTimerText.gameObject.SetActive(false);
+        searchStartedText.gameObject.SetActive(false);
 
-        int seconds =
-            Mathf.CeilToInt(timeRemaining);
+        endGamePanel.SetActive(true);
 
-        hidingTimerText.text =
-            seconds.ToString();
+        returnToLobbyButton.gameObject.SetActive(
+            PhotonNetwork.IsMasterClient
+        );
+
+        returnToLobbyButton.interactable =
+            PhotonNetwork.IsMasterClient;
     }
 
     private void ShowSearchStartedMessage()
@@ -133,15 +172,15 @@ public class GameFlowUI : MonoBehaviour
             return;
         }
 
-        if (state != GameManager_v2.GameState.Hiding)
+        if (roleText != null && state != GameManager_v2.GameState.Hiding)
         {
             roleText.gameObject.SetActive(false);
             return;
         }
 
-        roleText.gameObject.SetActive(true);
+        if (state != GameManager_v2.GameState.GameOver) roleText.gameObject.SetActive(true);
 
-        if (localPlayer.CurrentRole == PlayerRole.Role.Seeker)
+        if (roleText != null && localPlayer.CurrentRole == PlayerRole.Role.Seeker)
         {
             roleText.text = "SOS EL SEEKER\nEsperá a que los jugadores se escondan";
         }
@@ -153,7 +192,19 @@ public class GameFlowUI : MonoBehaviour
 
     private void UpdateCapturedText()
     {
-        PlayerRole localPlayer = GetLocalPlayerRole();
+        if (GameManager_v2.Instance == null)
+            return;
+
+        //durante la fase de búsqueda
+        if (GameManager_v2.Instance.CurrentState !=
+            GameManager_v2.GameState.Seeking)
+        {
+            capturedText.gameObject.SetActive(false);
+            return;
+        }
+
+        PlayerRole localPlayer =
+            GetLocalPlayerRole();
 
         if (localPlayer == null)
         {
@@ -173,8 +224,8 @@ public class GameFlowUI : MonoBehaviour
         capturedText.gameObject.SetActive(
             captured.IsCaptured
         );
-
     }
+
     private PlayerRole GetLocalPlayerRole()
     {
         PlayerRole[] players =

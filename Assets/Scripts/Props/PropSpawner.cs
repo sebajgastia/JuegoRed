@@ -118,4 +118,15 @@ public class PropSpawner : MonoBehaviourPun
 
         prop.DestroyPropLocal();
     }
+
+    public void ClearAllProps()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        foreach (int propId in spawnedProps.Keys)
+        {
+            RequestDestroyProp(propId);
+        }
+    }
 }
