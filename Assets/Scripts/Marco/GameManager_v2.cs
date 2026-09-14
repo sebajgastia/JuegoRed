@@ -20,8 +20,10 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
     [SerializeField] private PropSpawner propSpawner;
     [SerializeField] private float hidingTime = 45f;
+    [SerializeField] private float seekingTime = 120f; 
 
     private double hidingEndTime;
+    private double seekingEndTime; 
 
     public float HidingTimeRemaining
     {
@@ -33,6 +35,20 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
             return Mathf.Max(
                 0f,
                 (float)(hidingEndTime - PhotonNetwork.Time)
+            );
+        }
+    }
+
+    public float SeekingTimeRemaining
+    {
+        get
+        {
+            if (CurrentState != GameState.Seeking)
+                return 0f;
+
+            return Mathf.Max(
+                0f,
+                (float)(seekingEndTime - PhotonNetwork.Time)
             );
         }
     }
@@ -58,25 +74,22 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        //CAMBIAR A 4 PARA EL JUEGO / ESTA ASI PARA TESTEAR
+        // CAMBIAR A 4 PARA EL JUEGO / ESTA ASI PARA TESTEAR
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2) return;
 
-        Debug.Log("empieza el juego");
+        Debug.Log("Empieza el juego");
 
         propSpawner.SpawnProps();
-
         AssignRoles();
-
         StartHidingPhase();
     }
 
+    #region FASE DE ESCONDITE (HIDING)
     private void StartHidingPhase()
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        if (!PhotonNetwork.IsMasterClient) return;
 
-        double endTime =
-            PhotonNetwork.Time + hidingTime;
+        double endTime = PhotonNetwork.Time + hidingTime;
 
         pv.RPC(
             nameof(RPC_StartHiding),
@@ -93,10 +106,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         hidingEndTime = endTime;
         CurrentState = GameState.Hiding;
 
-        Debug.Log(
-            "Hiding comenzó. Termina en PhotonTime: "
-            + hidingEndTime
-        );
+        Debug.Log("Hiding comenzó. Termina en PhotonTime: " + hidingEndTime);
     }
 
     private IEnumerator HidingPhase()
@@ -106,8 +116,65 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
             yield return null;
         }
 
-        ChangeState(GameState.Seeking);
+        StartSeekingPhase();
     }
+    #endregion
+
+    #region FASE DE BÚSQUEDA (SEEKING)
+    private void StartSeekingPhase()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        double endTime = PhotonNetwork.Time + seekingTime;
+
+        pv.RPC(
+            nameof(RPC_StartSeeking),
+            RpcTarget.All,
+            endTime
+        );
+
+        StartCoroutine(SeekingPhase());
+    }
+
+    [PunRPC]
+    private void RPC_StartSeeking(double endTime)
+    {
+        seekingEndTime = endTime;
+        CurrentState = GameState.Seeking;
+
+        Debug.Log("Seeking comenzó. Termina en PhotonTime: " + seekingEndTime);
+    }
+
+    private IEnumerator SeekingPhase()
+    {
+        while (PhotonNetwork.Time < seekingEndTime)
+        {
+            yield return null;
+        }
+
+        Debug.Log("¡Se acabó el tiempo de búsqueda! Ganaron los Hiders.");
+        EndGame();
+    }
+
+    public void ApplyTimePenalty(float penaltySeconds)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (CurrentState == GameState.Seeking)
+        {
+
+            seekingEndTime -= penaltySeconds;
+            pv.RPC(nameof(RPC_SyncSeekingTime), RpcTarget.All, seekingEndTime);
+        }
+    }
+
+    [PunRPC]
+    private void RPC_SyncSeekingTime(double newEndTime)
+    {
+        seekingEndTime = newEndTime;
+        Debug.Log("¡Penalización aplicada! Tiempo restante de búsqueda: " + SeekingTimeRemaining);
+    }
+    #endregion
 
     public void EndGame()
     {
@@ -153,7 +220,6 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     private void Rpc_ChangeState(int newState)
     {
         CurrentState = (GameState)newState;
-
-        Debug.Log(CurrentState);
+        Debug.Log("Estado actual: " + CurrentState);
     }
 }

@@ -34,16 +34,23 @@ public class SeekerCapture : MonoBehaviourPun
 
     private void TryCapture()
     {
-        Collider2D[] colliders =
-            Physics2D.OverlapCircleAll(
-                transform.position,
-                captureRadius
-            );
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(
+            transform.position,
+            captureRadius
+        );
 
         foreach (Collider2D col in colliders)
         {
-            PlayerRole target =
-                col.GetComponent<PlayerRole>();
+            
+            HiderDecoy decoy = col.GetComponent<HiderDecoy>();
+            if (decoy != null)
+            {
+                decoy.InteractWithSeeker(); 
+                break; 
+            }
+
+           
+            PlayerRole target = col.GetComponent<PlayerRole>();
 
             if (target == null)
                 continue;
@@ -51,23 +58,15 @@ public class SeekerCapture : MonoBehaviourPun
             if (target == playerRole)
                 continue;
 
-            if (
-                target.CurrentRole !=
-                PlayerRole.Role.Hider
-            )
+            if (target.CurrentRole != PlayerRole.Role.Hider)
                 continue;
 
-            PlayerCaptured captured =
-                target.GetComponent<PlayerCaptured>();
+            PlayerCaptured captured = target.GetComponent<PlayerCaptured>();
 
-            if (
-                captured != null &&
-                captured.IsCaptured
-            )
+            if (captured != null && captured.IsCaptured)
                 continue;
 
-            PhotonView targetView =
-                target.GetComponent<PhotonView>();
+            PhotonView targetView = target.GetComponent<PhotonView>();
 
             if (targetView == null)
                 continue;

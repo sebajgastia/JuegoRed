@@ -49,6 +49,9 @@ MonoBehaviour:
   - RPC_StartHiding
   - RPC_Free
   - RPC_SetCapturedState
+  - RPC_OnDecoyTriggered
+  - RPC_StartSeeking
+  - RPC_SyncSeekingTime
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

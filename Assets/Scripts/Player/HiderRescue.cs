@@ -29,7 +29,6 @@ public class HiderRescue : MonoBehaviourPun
 
         PlayerRole nearbyCaptured = GetNearbyCapturedHider();
 
-        // Validar si el objetivo sigue al alcance
         if (rescueTarget != null)
         {
             float distance = Vector2.Distance(transform.position, rescueTarget.transform.position);
@@ -59,7 +58,7 @@ public class HiderRescue : MonoBehaviourPun
                 PlayerCaptured targetCaptured = rescueTarget.GetComponent<PlayerCaptured>();
                 if (targetCaptured != null)
                 {
-                    // Llama a Free(), el cual ejecuta el RPC buffered en la red
+                 
                     targetCaptured.Free();
                 }
 
