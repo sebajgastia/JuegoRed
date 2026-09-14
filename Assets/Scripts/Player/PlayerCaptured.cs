@@ -4,25 +4,33 @@ using UnityEngine;
 public class PlayerCaptured : MonoBehaviourPun
 {
     public bool IsCaptured { get; private set; }
-    private PlayerRole playerRole;
 
     public void Capture()
     {
         if (IsCaptured) return;
-        photonView.RPC(nameof(RPC_SetCapturedState), RpcTarget.AllBuffered, true);
+
+        photonView.RPC(
+            nameof(RPC_SetCapturedState),
+            RpcTarget.AllBuffered,
+            true
+        );
     }
 
     public void Free()
     {
         if (!IsCaptured) return;
-        photonView.RPC(nameof(RPC_SetCapturedState), RpcTarget.AllBuffered, false);
+
+        photonView.RPC(
+            nameof(RPC_SetCapturedState),
+            RpcTarget.AllBuffered,
+            false
+        );
     }
 
     [PunRPC]
     private void RPC_SetCapturedState(bool state)
     {
         IsCaptured = state;
-        playerRole.UpdateColor();
 
         if (IsCaptured)
         {

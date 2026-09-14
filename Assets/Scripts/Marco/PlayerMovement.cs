@@ -6,11 +6,15 @@ public class PlayerMovement : MonoBehaviourPun
     public float moveSpeed = 5f;
     private PlayerRole playerRole;
     private PlayerCaptured playerCaptured;
+    [SerializeField] private GameObject grenadePrefab;
+    [SerializeField] private Transform grenadeSpawnPoint;
+    private int grenadeAmount;
 
     private void Start()
     {
         playerRole = GetComponent<PlayerRole>();
         playerCaptured = GetComponent<PlayerCaptured>();
+        grenadeAmount = 2;
     }
 
     void Update()
@@ -30,24 +34,52 @@ public class PlayerMovement : MonoBehaviourPun
         Vector3 movement = new Vector3(h, v, 0f);
         transform.position += movement.normalized * moveSpeed * Time.deltaTime;
 
-        if(Input.GetKeyDown(KeyCode.F))
+        AimAtMouse();
+
+        if (Input.GetKeyDown(KeyCode.F) && grenadeAmount > 0)
         {
-            DestroyObjects();
+            ThrowGrenade();
+            grenadeAmount--;
         }
     }
-
-    private void DestroyObjects()
+    private void ThrowGrenade()
     {
-        GameObject[] destructibles = GameObject.FindGameObjectsWithTag("Prop");
+        Debug.Log("Intento tirar granada");
 
-        foreach (GameObject obj in destructibles)
+        if (playerRole.CurrentRole != PlayerRole.Role.Seeker)
         {
-            Prop prop = obj.GetComponent<Prop>();
-
-            if (prop != null)
-            {
-                prop.DestroyProp();
-            }
+            Debug.Log("No soy Seeker");
+            return;
         }
+
+        if (GameManager_v2.Instance.CurrentState !=
+            GameManager_v2.GameState.Seeking)
+        {
+            Debug.Log("Todavía no estamos en Seeking");
+            return;
+        }
+
+        Debug.Log("Voy a instanciar la granada");
+
+        PhotonNetwork.Instantiate(
+            grenadePrefab.name,
+            grenadeSpawnPoint.position,
+            grenadeSpawnPoint.rotation
+        );
+    }
+    private void AimAtMouse()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
+
+        Vector2 direction = mousePosition - transform.position;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        grenadeSpawnPoint.rotation = Quaternion.Euler(
+            0f,
+            0f,
+            angle - 90f
+        );
     }
 }
