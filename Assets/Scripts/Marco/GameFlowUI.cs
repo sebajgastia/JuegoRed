@@ -53,7 +53,7 @@ public class GameFlowUI : MonoBehaviour
         );
 
         startButton.interactable =
-            PhotonNetwork.CurrentRoom.PlayerCount == 3;//cambiar a 4
+            PhotonNetwork.CurrentRoom.PlayerCount == 2;//cambiar a 4
 
         returnToLobbyButton.gameObject.SetActive(
             isMaster &&

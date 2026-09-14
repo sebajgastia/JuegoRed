@@ -60,8 +60,6 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
-        // Si no quedan disponibles de ese prefab,
-        // creamos otro del MISMO tipo.
         GameObject newObj =
             Instantiate(prefabs[prefabIndex]);
 
