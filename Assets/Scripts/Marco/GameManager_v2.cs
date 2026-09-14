@@ -108,7 +108,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         hidingEndTime = endTime;
         CurrentState = GameState.Hiding;
 
-        Debug.Log("Hiding comenzó. Termina en PhotonTime: " + hidingEndTime);
+        Debug.Log("Hiding comenzÃ³. Termina en PhotonTime: " + hidingEndTime);
     }
 
     private IEnumerator HidingPhase()
@@ -127,7 +127,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region FASE DE BÚSQUEDA (SEEKING)
+    #region FASE DE BUSQUEDA (SEEKING)
     private void StartSeekingPhase()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -149,7 +149,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
         seekingEndTime = endTime;
         CurrentState = GameState.Seeking;
 
-        Debug.Log("Seeking comenzó. Termina en PhotonTime: " + seekingEndTime);
+        Debug.Log("Seeking comenzÃ³. Termina en PhotonTime: " + seekingEndTime);
     }
 
     private IEnumerator SeekingPhase()
@@ -159,7 +159,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
 
             if (AreAllHidersCaptured())
             {
-                Debug.Log("Todos los Hiders fueron capturados. Ganó el Seeker.");
+                Debug.Log("Todos los Hiders fueron capturados. GanÃ³ el Seeker.");
 
                 EndGame(PlayerRole.Role.Seeker);
 
@@ -175,7 +175,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
             yield break;
         }
 
-        Debug.Log("Se acabó el tiempo. Ganaron los Hiders.");
+        Debug.Log("Se acabÃ³ el tiempo. Ganaron los Hiders.");
 
         EndGame(PlayerRole.Role.Hider);
     }
@@ -222,7 +222,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     private void RPC_SyncSeekingTime(double newEndTime)
     {
         seekingEndTime = newEndTime;
-        Debug.Log("¡Penalización aplicada! Tiempo restante de búsqueda: " + SeekingTimeRemaining);
+        Debug.Log("Penalizacion aplicada. Tiempo restante de busqueda: " + SeekingTimeRemaining);
     }
     #endregion
 
@@ -249,7 +249,7 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
             GameState.GameOver;
 
         Debug.Log(
-            "GAME OVER - Ganó: " +
+            "GAME OVER - GanÃ³: " +
             WinningRole
         );
     }
@@ -260,6 +260,8 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
             return;
 
         propSpawner.ClearAllProps();
+
+        ClearAllDecoys();
 
         ResetRoles();
 
@@ -309,5 +311,29 @@ public class GameManager_v2 : MonoBehaviourPunCallbacks
     {
         CurrentState = (GameState)newState;
         Debug.Log("Estado actual: " + CurrentState);
+    }
+    private void ClearAllDecoys()
+    {
+        pv.RPC(
+            nameof(RPC_ClearOwnDecoys),
+            RpcTarget.All
+        );
+    }
+
+    [PunRPC]
+    private void RPC_ClearOwnDecoys()
+    {
+        HiderDecoy[] decoys =
+            FindObjectsOfType<HiderDecoy>();
+
+        foreach (HiderDecoy decoy in decoys)
+        {
+            if (decoy.photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(
+                    decoy.gameObject
+                );
+            }
+        }
     }
 }

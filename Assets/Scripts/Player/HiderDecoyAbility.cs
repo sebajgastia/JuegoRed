@@ -13,6 +13,7 @@ public class HiderDecoyAbility : MonoBehaviourPun
     private void Awake()
     {
         playerRole = GetComponent<PlayerRole>();
+        maxDecoys = 2;
     }
 
     private void Update()
